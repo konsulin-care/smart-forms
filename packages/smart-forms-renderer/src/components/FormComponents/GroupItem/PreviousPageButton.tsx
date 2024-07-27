@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
 import Iconify from '../../Iconify/Iconify';
 
 interface PreviousPageButtonProps {
@@ -28,15 +28,14 @@ function PreviousPageButton(props: PreviousPageButtonProps) {
   const { isDisabled, onPreviousPageClick } = props;
 
   return (
-    <Button
-      variant="contained"
-      size="small"
-      endIcon={<Iconify icon="material-symbols:arrow-back" />}
-      disabled={isDisabled}
+    <Fab
       color="secondary"
+      size="small"
+      aria-label="back"
+      disabled={isDisabled}
       onClick={onPreviousPageClick}>
-      Previous Page
-    </Button>
+      <Iconify icon="material-symbols:chevron-left-rounded" />
+    </Fab>
   );
 }
 
