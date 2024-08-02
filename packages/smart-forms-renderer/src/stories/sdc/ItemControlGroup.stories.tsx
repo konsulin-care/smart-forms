@@ -22,7 +22,9 @@ import {
   qItemControlGroupGridMultiRow,
   qItemControlGroupGridSingleRow,
   qItemControlGroupGTable,
-  qItemControlGroupPage
+  qItemControlGroupPage,
+  qItemControlGroupPageContainer,
+  qItemControlGroupPageNonTopLevelPageContainer
 } from '../assets/questionnaires';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -65,5 +67,17 @@ export const TabContainer: Story = {
 export const Page: Story = {
   args: {
     questionnaire: qItemControlGroupPage
+  }
+};
+
+export const PageContainer: Story = {
+  args: {
+    questionnaire: qItemControlGroupPageContainer
+  }
+};
+
+export const PageContainerNonSingleTopLevel: Story = {
+  args: {
+    questionnaire: qItemControlGroupPageNonTopLevelPageContainer
   }
 };
