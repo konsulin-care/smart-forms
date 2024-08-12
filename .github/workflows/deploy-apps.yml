@@ -1,0 +1,13 @@
+name: Deploy Apps
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
