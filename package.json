@@ -1,8 +1,13 @@
 {
+  "name": "smart-forms",
+  "version": "1.0.0",
   "scripts": {
     "lint": "eslint -c .eslintrc.json .",
     "lint-fix": "eslint -c .eslintrc.json --fix .",
     "check-formatting": "prettier --check ."
+  },
+    "publishConfig":{
+    "registry": "https://repository.konsulin.care/repository/smart-forms/"
   },
   "workspaces": [
     "apps/smart-forms-app",
