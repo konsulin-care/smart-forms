@@ -28,24 +28,21 @@ jobs:
       - name: Fetch upstream changes
         run: git fetch upstream
 
-      - name: Checkout main branch
-        run: git checkout main
+      - name: Checkout upstream main branch
+        run: git checkout upstream/main
 
-      - name: Replace all files with upstream/main
-        run: |
-          git rm -rf .
-          git checkout upstream/main -- .
-          git add .
+      - name: Delete local main branch
+        run: git branch -D main
 
-      - name: Commit the changes
-        run: git commit -am "Replace with upstream/main content"
+      - name: Checkout main branch from upstream/main
+        run: git checkout -b main upstream/main
 
       - name: Remove existing workflows
-        run: git rm -rf .github/workflows
+        run: rm -rf .github/workflows
 
       - name: Restore specific files from origin
         run: |
-          git checkout origin/main .github/workflows
+          git checkout origin/main .github/workflows .
 
       - name: Update package.json
         run: |
