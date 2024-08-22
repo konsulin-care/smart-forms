@@ -1,0 +1,79 @@
+name: Merge upstream branches
+on:
+  schedule:
+     # actually, ~5 minutes is the highest
+     # effective frequency you will get
+    - cron:  '* * * * *'
+
+
+jobs:
+  merge:
+    name: Publish App to Nexus Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Set Git user
+        run: |
+          git config --global user.name 'ardihikaru'
+          git config --global user.email 'ardihikaru@users.noreply.github.com'
+
+      - name: Unshallow the repository
+        run: git pull --unshallow
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/aehrc/smart-forms.git
+
+      - name: Fetch upstream changes
+        run: git fetch upstream
+
+      - name: Checkout main branch
+        run: git checkout main
+
+      - name: Replace all files with upstream/main
+        run: |
+          git rm -rf .
+          git checkout upstream/main -- .
+          git add .
+
+      - name: Commit the changes
+        run: git commit -am "Replace with upstream/main content"
+
+      - name: Remove existing workflows
+        run: git rm -rf .github/workflows
+
+      - name: Restore specific files from origin
+        run: |
+          git checkout origin/main .github/workflows
+
+      - name: Update package.json
+        run: |
+          jq '.publishConfig.registry="https://repository.konsulin.care/repository/smart-forms/" | .name="smart-forms" | .version="1.0.9"' package.json > tmp.json
+          mv tmp.json package.json
+
+      - name: Commit the changes
+        run: git commit -am "update from upstream remote"
+        continue-on-error: true
+
+      - name: Push the changes
+        run: git push origin main --force
+        continue-on-error: true
+
+      - name: Set Up Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.16
+          check-latest: false
+
+      - name: Installing Packages
+        run: npm install
+
+      - name: Set up npm
+        run: |
+          echo "registry=https://repository.konsulin.care/repository/smart-forms/" > .npmrc
+          echo "//repository.konsulin.care/repository/smart-forms/:_authToken=${{ SECRETS.NPM_TOKEN }}" >> .npmrc
+
+      - name: Publish npm package
+        run: npm publish
+
