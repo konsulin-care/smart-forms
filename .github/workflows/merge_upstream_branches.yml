@@ -1,9 +1,11 @@
 name: Merge upstream branches
 on:
-  schedule:
-    # Cron job will run once a day at midnight
-    - cron:  '0 0 * * *'
-
+#   schedule:
+#     # Cron job will run once a day at midnight
+#     - cron:  '0 0 * * *'
+  push:
+    branches:
+      - bugfix//remove-deployment-on-nexus
 jobs:
   merge:
     name: Publish App to Nexus Repository
