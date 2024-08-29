@@ -1,10 +1,8 @@
 name: Merge upstream branches
 on:
   schedule:
-     # actually, ~5 minutes is the highest
-     # effective frequency you will get
-    - cron:  '* * * * *'
-
+    # Cron job will run once a day at midnight
+    - cron:  '0 0 * * *'
 
 jobs:
   merge:
@@ -37,40 +35,6 @@ jobs:
       - name: Checkout main branch from upstream/main
         run: git checkout -b main upstream/main
 
-      - name: Remove existing workflows
-        run: rm -rf .github/workflows
-
-      - name: Restore specific files from origin
-        run: |
-          git checkout origin/main .github/workflows .
-
-      - name: Update package.json
-        run: |
-          jq '.publishConfig.registry="https://repository.konsulin.care/repository/smart-forms/" | .name="smart-forms" | .version="1.0.9"' package.json > tmp.json
-          mv tmp.json package.json
-
-      - name: Commit the changes
-        run: git commit -am "update from upstream remote"
-        continue-on-error: true
-
       - name: Push the changes
         run: git push origin main --force
         continue-on-error: true
-
-      - name: Set Up Node JS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.16
-          check-latest: false
-
-      - name: Installing Packages
-        run: npm install
-
-      - name: Set up npm
-        run: |
-          echo "registry=https://repository.konsulin.care/repository/smart-forms/" > .npmrc
-          echo "//repository.konsulin.care/repository/smart-forms/:_authToken=${{ SECRETS.NPM_TOKEN }}" >> .npmrc
-
-      - name: Publish npm package
-        run: npm publish
-
