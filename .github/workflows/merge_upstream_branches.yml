@@ -1,9 +1,11 @@
 name: Merge upstream branches
 on:
+  schedule:
+    # Cron job will run once a day at midnight
+    - cron:  '0 0 * * *'
   push:
     branches:
-      - bugfix/test
-
+      - main
 jobs:
   merge:
     name: Publish App to Nexus Repository
@@ -26,13 +28,11 @@ jobs:
       - name: Fetch upstream changes
         run: git fetch upstream
 
-      - name: Delete local main branch if exists
-        run: |
-          if git rev-parse --verify main >/dev/null 2>&1; then
-            git branch -D main
-          else
-            echo "Branch 'main' not found locally, skipping deletion."
-          fi
+      - name: Checkout upstream main branch
+        run: git checkout upstream/main
+
+      - name: Delete local main branch
+        run: git branch -D main
 
       - name: Checkout main branch from upstream/main
         run: git checkout -b main upstream/main
