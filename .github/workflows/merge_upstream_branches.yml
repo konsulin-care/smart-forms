@@ -5,7 +5,7 @@ on:
 #     - cron:  '0 0 * * *'
   push:
     branches:
-      - bugfix//remove-deployment-on-nexus
+      - bugfix/remove-deployment-on-nexus
 jobs:
   merge:
     name: Publish App to Nexus Repository
