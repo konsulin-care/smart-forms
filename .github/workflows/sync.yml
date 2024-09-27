@@ -1,11 +1,8 @@
 name: 'Upstream Sync'
-# on:
-#   schedule:
-#     # Cron job will run once a day at midnight
-#     - cron:  '0 0 * * *'
-
 on:
-  push:
+  schedule:
+    # Cron job will run once a day at midnight
+    - cron:  '0 0 * * *'
 
   workflow_dispatch:  # click the button on Github repo!
     inputs:
@@ -52,12 +49,13 @@ jobs:
         run: |
           shopt -s dotglob
           cp -r packages/smart-forms-renderer/* .
+
       - run: rm -rf packages
-      - run: pwd
-      - run: ls -la
+
       - uses: actions/setup-node@v3
         with:
           node-version: "16.20.2"
+
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
