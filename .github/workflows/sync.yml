@@ -43,11 +43,10 @@ jobs:
       contents: read
       packages: write # allow GITHUB_TOKEN to publish packages
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout files
+        uses: Bhacaz/checkout-files@v2
         with:
-          sparse-checkout: |
-            packages/smart-forms-renderer
-          path: .
+          files: packages/smart-forms-renderer
       - run: pwd
       - run: ls -la
       - uses: actions/setup-node@v3
