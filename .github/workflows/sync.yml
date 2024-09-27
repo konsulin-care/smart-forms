@@ -1,0 +1,57 @@
+name: 'Upstream Sync'
+# on:
+#   schedule:
+#     # Cron job will run once a day at midnight
+#     - cron:  '0 0 * * *'
+
+on:
+  push:
+
+  workflow_dispatch:  # click the button on Github repo!
+    inputs:
+      sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
+        description: 'Fork Sync Test Mode'
+        type: boolean
+        default: false
+
+
+jobs:
+  sync_latest_from_upstream:
+    runs-on: ubuntu-latest
+    name: Sync latest commits from upstream repo
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref:  main
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Sync upstream changes
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
+      with:
+        target_sync_branch: main
+        target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+        upstream_sync_branch: main
+        upstream_sync_repo: aehrc/smart-forms
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Smart Forms Renderer
+    permissions:
+      contents: read
+      packages: write # allow GITHUB_TOKEN to publish packages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            packages/smart-forms-renderer
+      - run: move packages/smart-forms-renderer/{.,}* .
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.20.2"
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          registry: "https://registry.npmjs.org"
