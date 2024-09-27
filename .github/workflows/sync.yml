@@ -45,9 +45,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          path: .
           sparse-checkout: |
-            packages
-#           path: .
+            packages/smart-forms-renderer/
 
       - run: pwd
       - run: ls -la
