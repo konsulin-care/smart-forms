@@ -47,7 +47,8 @@ jobs:
         with:
           sparse-checkout: |
             packages/smart-forms-renderer
-      - run: mv packages/smart-forms-renderer/{.,}* .
+          path: .
+
       - uses: actions/setup-node@v3
         with:
           node-version: "16.20.2"
