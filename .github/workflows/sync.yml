@@ -44,10 +44,13 @@ jobs:
       packages: write # allow GITHUB_TOKEN to publish packages
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: .
-          sparse-checkout: |
-            packages/smart-forms-renderer/
+      - name: Remove all except 'packages'
+        run: |
+          find . -maxdepth 1 ! -name 'packages' ! -name '.' -exec rm -rf {} +
+
+      - name: Move 'packages/smart-forms-renderer' to root
+        run: |
+          mv packages/smart-forms-renderer/{.,}* .
 
       - run: pwd
       - run: ls -la
