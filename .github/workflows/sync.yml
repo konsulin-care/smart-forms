@@ -48,7 +48,8 @@ jobs:
           sparse-checkout: |
             packages/smart-forms-renderer
           path: .
-
+      - run: pwd
+      - run: ls -la
       - uses: actions/setup-node@v3
         with:
           node-version: "16.20.2"
