@@ -50,7 +50,8 @@ jobs:
 
       - name: Move 'packages/smart-forms-renderer' to root
         run: |
-          cp -r packages/smart-forms-renderer/{.,}* .
+          shopt -s dotglob
+          cp -r packages/smart-forms-renderer/* .
       - run: rm -rf packages
       - run: pwd
       - run: ls -la
